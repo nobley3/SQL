@@ -1,0 +1,168 @@
+create table tblcall_list(
+regno number(3) not null primary key,
+regtime number(10),
+regdate date,
+cusno varchar2(10),
+startpoint varchar2(20),
+destination varchar2(20),
+texino varchar2(10),
+state varchar2(1)
+);
+
+insert into tblcall_list values(1,0830,'20210101','P001','노원','종로','T001','p');
+insert into tblcall_list values(2,1210,'20210102','P002','강남','을지로','T002','R');
+insert into tblcall_list values(3,1120,'20210510','P003','서울','부산','T003','p');
+insert into tblcall_list values(4,1510,'20210520','P003','마포','종로','T001','p');
+insert into tblcall_list values(5,1610,'20210530','P001','무교동','강남','미정','R');
+
+commit;
+
+
+create table tblcust(
+   id varchar2(10) not null primary key,
+   name varchar2(20),
+   tel varchar2(20)
+);
+
+insert into tblcust values('P001','김고객',  '01011112222');
+insert into tblcust values('P002','이고객',  '01022223333');
+insert into tblcust values('P003','박고객',  '01033334444');
+
+commit;
+
+
+
+create table tbl_taxi(
+id varchar2(10) not null primary key,
+name varchar2(20),
+kind varchar2(20)
+);
+
+insert into tbl_taxi values('T001','김택시','개인');
+insert into tbl_taxi values('T002','이택시','개인');
+insert into tbl_taxi values('T003','박택시','개인');
+
+commit;
+
+select * from TBL_TAXI;
+select * from tblcall_list;
+select * from tblcust;
+
+
+select REGNO 예약번호,
+substr(lpad(REGTIME,4,'0'),1,2)||':'||substr(lpad(REGTIME,4,'0'),3,2)예약시간,
+to_char(REGDATE,'yyyy-mm-dd') 예약날짜,
+CUSNO 고객아이디,
+STARTPOINT 출발지,
+DESTINATION 도착지,
+TEXINO 택시번호,
+STATE 배차상태
+from tblcall_list ;
+
+
+-- 조회쿼리 작성
+
+select 
+cust.TEL,
+call.REGNO,
+call.REGTIME,
+call.REGDATE,
+cust.NAME,
+call.STARTPOINT,
+call.DESTINATION,
+call.TEXINO,
+call.STATE
+from tblcall_list call
+join tblcust cust
+on call.CUSNO=cust.id;
+
+select 
+substr(cust.TEL,1,3)||'-' ||substr(cust.TEL,4,4)||'-'||substr(cust.TEL,8,4)고객전화번호,
+call.REGNO 예약번호,
+substr(lpad(call.REGTIME,4,'0'),1,2)||':'||substr(lpad(call.REGTIME,4,'0'),3,2)예약시간,
+to_char(call.REGDATE,'yyyy-mm-dd') 예약날짜,
+cust.NAME 고객명,
+call.STARTPOINT 출발지,
+call.DESTINATION 목적지,
+call.TEXINO 택시번호,
+decode(call.STATE,'p','배차완료','R','배차준비','X','배차미정') 상태
+from tblcall_list call
+join tblcust cust
+on call.CUSNO=cust.id;
+
+
+
+select * from TBL_JOIN_200;
+select * from TBL_MENTOR_200;
+select * from TBL_SCORE_200;
+
+--1.  참가자 목록조회
+
+SELECT 
+join_id , 
+join_nm ,  
+substr(birth,1,4)|| '년' || substr(birth, 5,2) || '월' ||  substr(birth, 7,2) || '일'  , 
+decode(gender,'M','남성','F','여성') , 
+decode(specialty,'V','보컬', 'D','댄스', 'R','랩') ,
+charm
+FROM  tbl_join_200;
+
+
+
+--2.  참가자 점수 조회
+
+SELECT  score_no , 
+artistid , 
+join_nm , 
+substr(birth,1,4)|| '년' || substr(birth, 5,2) || '월' ||  substr(birth, 7,2) || '일'  , 
+score,    
+decode(  trunc(score / 10) , '10' ,'A', '9','A','8','B','7','C','D') ,   
+mentor_nm
+FROM  tbl_score_200 s , tbl_join_200  j, tbl_mentor_200 m
+WHERE  s.artistid  = j.join_id  and s.mentorid  = m.mentor_id 
+ORDER BY score_no; 
+
+
+--3. 참가자 등수 조회
+
+SELECT   artistid, join_nm ,    
+sum(score)  , 
+trunc(avg(score),2), 
+rank () over( order by avg(score) desc ) rank 
+FROM    tbl_score_200 s, tbl_join_200 j
+WHERE  s.artistid  = j.join_id
+GROUP BY  artistid, join_nm
+ORDER BY   rank ; 
+
+select * from acorntbl; 
+
+
+select 
+call.REGNO 예약번호,
+substr(lpad(call.REGTIME,4,'0'),1,2)||':'||substr(lpad(call.REGTIME,4,'0'),3,2)예약시간,
+to_char(call.REGDATE,'yyyy-mm-dd') 예약날짜,
+cust.ID 고객아이디,
+call.STARTPOINT 출발지,
+call.DESTINATION 목적지,
+call.TEXINO 택시번호,
+decode(call.STATE,'p','배차완료','R','배차준비','X','배차미정') 상태
+from tblcall_list call
+join tblcust cust
+on call.CUSNO=cust.id;
+
+select * from tblcust;
+
+
+
+		update tblcall_list
+    set regtime= '1710',
+        regdate= '2021/06/06' ,
+        cusno ='P004' ,
+        startpoint= '인천' ,
+        destination= '강남'
+   where regno= '6';
+
+
+select * from TBL_TAXI;
+select * from tblcall_list;
+select * from tblcust;

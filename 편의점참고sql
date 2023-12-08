@@ -1,0 +1,41 @@
+cu
+1.상품목록
+
+select 
+GOODS_CD 상품코드,
+GOODS_NM 상품명,
+GOODS_PRICE 판매단가,
+COST "(상품)원가",
+to_char(IN_DATE,'yyyy-mm-dd')입고일자
+from goods_tbl_500;
+
+2.점포별 매출현황
+
+select 
+st.STORE_NM 점포명,
+sum (case when  s.PAY_TYPE = 01 then g.GOODS_PRICE * s.SALE_CNT else 0 end)||'원' 현금매출,
+sum (case when  s.PAY_TYPE = 02 then g.GOODS_PRICE * s.SALE_CNT else 0 end) ||'원' 카드매출,
+sum( g.GOODS_PRICE * s.SALE_CNT) ||'원' as 총매출
+from  sale_tbl_500 s
+join goods_tbl_500 g
+on s.GOODS_CD = g.GOODS_CD
+join store_tbl_500 st
+on s.STORE_CD = st.STORE_CD
+group by st.STORE_NM;
+
+3.점포 판매현황
+
+select 
+decode (s.SALE_FG ,'1','판매','2','취소') 판매구분,
+s.SALE_NO 판매번호,
+to_char(s.SALE_YMD,'yyyy-mm-dd') 판매일자,
+g.GOODS_NM 상품명,
+s.SALE_CNT 판매수량,
+g.GOODS_PRICE*s.SALE_CNT 판매금액,
+decode(s.PAY_TYPE,'02','카드','01','현금') 수취구분
+from  sale_tbl_500 s
+join goods_tbl_500 g
+on s.GOODS_CD = g.GOODS_CD
+join store_tbl_500 st
+on s.STORE_CD = st.STORE_CD
+where st.STORE_CD='A001';

@@ -1,0 +1,54 @@
+create table goodstbl(
+
+	id varchar2(20) primary key,
+	name varchar2(20) ,
+	price number(4)
+);
+
+insert into goodstbl values('c001','아메리카노',2000);
+insert into goodstbl values('c002','바닐라라떼',2800);
+insert into goodstbl values('c003','연유라떼',3800);
+
+select * from GOODSTBL;
+commit;
+
+create   table  foodtbl(
+   name varchar2(20) primary key, 
+   price varchar2(10)
+);
+
+
+insert into foodtbl values( '스파게티', '10000');
+insert into foodtbl values( '초밥', '12000');
+insert into foodtbl values( '돈까스', '12000');
+insert into foodtbl values( '마라탕', '12000');
+insert into foodtbl values( '덮밥', '12000');
+commit;
+
+create table musictbl(
+	singer varchar2(20) primary key ,
+	title varchar2(20)
+);
+
+insert into musictbl values('유주','rewind');
+insert into musictbl values('balmingTiger','섹시느낌');
+insert into musictbl values('아이브','Iam');
+insert into musictbl values('DAWN','빛이나는너에게');
+insert into musictbl values('백아','첫사랑');
+
+create table movietbl(
+  title varchar2(30) primary key,
+  age varchar2(20) ,
+  runtime varchar2(20)
+);
+
+drop table movietbl;
+
+insert into movietbl values('잠','15세','94분');
+insert into movietbl values('오펜하이머 ','15세','180분');
+insert into movietbl values('콘크리트유토피아','15세','130분');
+insert into movietbl values('그란 투리스모','12세','134분');
+insert into movietbl values('엘리멘탈 ','전체이용가','109분');
+commit;
+
+select * from acorntbl;
